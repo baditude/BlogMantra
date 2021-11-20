@@ -5,6 +5,7 @@ include ("classes/connect.php");
 include ("classes/login.php");
 include ("classes/user.php");
 include ("classes/post.php");
+include ("classes/image.php");
 
 
 
@@ -16,28 +17,45 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 {
     if($_FILES['file']['type'] == "image/jpeg" || $_FILES['file']['type'] == "image/png" || $_FILES['file']['type'] == "image/jpg")
     {
-        if(isset($_FILES['file']['name']) && $_FILES['file']['tmp_name'] != "")
+
+        $allowed_size = (1024 * 1024) * 3;
+
+        if($_FILES['file']['size'] < $allowed_size)
         {
 
-            $filename = "uploads/".  $_FILES['file']['name'];
-            move_uploaded_file($_FILES['file']['tmp_name'],$filename);
-            
-            if(file_exists($filename))
-            { 
-                $userid = $user_data['userid'];
-                $query ="update users set profile_image = '$filename' where userid = '$userid' limit 1";
-                $db = new database();
-                $db -> save($query);
+        
+            if(isset($_FILES['file']['name']) && $_FILES['file']['tmp_name'] != "")
+            {
 
-                 header("Location:profile.php");
-                 die;
+                $filename = "uploads/".  $_FILES['file']['name'];
+                move_uploaded_file($_FILES['file']['tmp_name'],$filename);
+                
+               $image = new image();
+               $image->crop_image($filename,$filename,800,800);
+
+                if(file_exists($filename))
+                { 
+                    $userid = $user_data['userid'];
+                    $query ="update users set profile_image = '$filename' where userid = '$userid' limit 1";
+                    $db = new database();
+                    $db -> save($query);
+
+                    header("Location:profile.php");
+                    die;
+                }
+            }
+            else
+            {
+                    echo "<div style ='text-align:center;font-size:12px;color:white;background-color:grey'>";
+                    echo "ADD A VALID IMAGE";
+                    echo "</div>";
             }
         }
         else
         {
-                echo "<div style ='text-align:center;font-size:12px;color:white;background-color:grey'>";
-                echo "ADD A VALID IMAGE";
-                echo "</div>";
+            echo "<div style ='text-align:center;font-size:12px;color:white;background-color:grey'>";
+            echo "FILE SIZE EXCEEDS 3 MB LIMIT ";
+            echo "</div>";
         }
     }
     else
