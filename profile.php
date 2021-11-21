@@ -5,23 +5,32 @@ include ("classes/connect.php");
 include ("classes/login.php");
 include ("classes/user.php");
 include ("classes/post.php");
-
+include ("classes/image.php");
+include ("classes/profile.php");
 
 
 $login = new login();
 $user_data = $login->check_login($_SESSION['blog_userid']);
 
+if(isset($_GET['id']))
+{
+    $profile = new Profile();
+    $profile_data =$profile->get_profile($_GET['id']);
 
-
-
+    if(is_array($profile_data))
+    {
+        $user_data = $profile_data[0];
+    }
+}
             // below this we have code for possting
     
     if($_SERVER['REQUEST_METHOD'] == "POST")
     {
+       
         $post = new post();
         $id = $_SESSION['blog_userid'];
 
-        $result = $post->create_post( $id , $_POST );
+        $result = $post->create_post( $id , $_POST ,$_FILES);
 
         if($result == "")
         {
@@ -40,13 +49,13 @@ $user_data = $login->check_login($_SESSION['blog_userid']);
     // collect post
 
     $post = new post();
-    $id = $_SESSION['blog_userid'];
+    $id = $user_data['userid'];
     $posts = $post->get_post( $id  );
 
     // collect friends
     
     $user = new user();
-    $id = $_SESSION['blog_userid'];
+    
     $friends = $user->get_friends( $id  );
 ?>
 
@@ -156,8 +165,9 @@ $user_data = $login->check_login($_SESSION['blog_userid']);
                 <!-- write something here -->
             <div style="min-height: 400px; flex:2.5;padding: 20px; padding-right: 0px;">
                     <div style=" ;background-color: white; border: solid 1px #aaa; padding: 10px;">
-                        <form  method="post">
+                        <form  method="post" enctype="multipart/form-data">
                             <textarea name = "post" placeholder = "Do You Wanna Share Something?"></textarea>
+                            <input type="file" name="file" >
                             <input id="post_button" value="Post" type="submit" >
                             <br>
                         </form>

@@ -82,7 +82,7 @@ $user_data = $login->check_login($_SESSION['blog_userid']);
                     <div id="post_bar" style="">
                        
                        <!-- post--1 -->
-                        <div id="post">
+                       <div id="post">
                             <div>
                                <img src="./assets/user2.jpg" style="width: 70px; margin-right: 8px;">
                             </div>
