@@ -20,31 +20,94 @@ class image
             }
             else
             {
+                // make width equal to max width
                 $ratio = $max_height / $original_height;
                 $new_height = $max_height;
                 $new_width = $original_width * $ratio;
             }
             
         }
+
+        // ADJUST INCASE MAX WID AND HEIGHT ARE DIFFERENT
+        if ($max_width != $max_height)
+        {
+            if($max_height > $max_width)
+            {
+                if($max_height > $new_height)
+                {
+                    $adjustment = ($max_height/$new_height);
+                }
+                else
+                {
+                    $adjustment = ($new_height/$max_height);
+                }
+                $new_width = $new_width *$adjustment;
+                $new_height = $new_height *$adjustment;
+            }
+            else
+            {
+                if($max_width > $new_width)
+                {
+                    $adjustment = ($max_width/$new_width);
+                }
+                else
+                {
+                    $adjustment = ($new_width/$max_width);
+                }
+                $new_width = $new_width *$adjustment;
+                $new_height = $new_height *$adjustment;
+            }
+        }
         $new_image = imagecreatetruecolor ($new_width,$new_height);
         imagecopyresampled($new_image,$original_image,0,0,0,0,$new_width,$new_height,$original_width,$original_height);
 
         imagedestroy($original_image);
 
-        if($new_height >$new_width)
+        if ($max_width != $max_height)
         {
-            $differnce = ($new_height - $new_width);
-            $y = round($differnce /2);
-            $x = 0;
+            if($max_width >$max_height)
+            {
+                $differnce = ($new_height - $max_height);
+                
+                if($differnce<0)
+                   { 
+                       $differnce = $differnce * -1;
+                   }
+               
+                $y = round($differnce /2);
+                $x = 0;
+            }
+            else
+            {
+                $differnce = ($new_width - $max_height  );
+                
+                if($differnce<0)
+                { 
+                    $differnce = $differnce * -1;
+                }
+                
+                $x = round($differnce /2);
+                $y = 0;
+            }
         }
         else
         {
-            $differnce = ($new_width - $new_height  );
-            $x = round($differnce /2);
-            $y = 0;
+            if($new_height >$new_width)
+            {
+                $differnce = ($new_height - $new_width);
+                $y = round($differnce /2);
+                $x = 0;
+            }
+            else
+            {
+                $differnce = ($new_width - $new_height  );
+                $x = round($differnce /2);
+                $y = 0;
+            }
         }
+
         $new_cropped_image = imagecreatetruecolor ($max_width,$max_height);
-        imagecopyresampled($new_cropped_image,$new_image,0,0,0,0,$x,$y,$max_width,$max_height);
+        imagecopyresampled($new_cropped_image,$new_image,0,0,$x,$y,$max_width,$max_height,$max_width,$max_height);
         imagedestroy($new_image);
         
         imagejpeg($new_cropped_image,$cropped_file_name,90);

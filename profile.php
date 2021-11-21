@@ -11,6 +11,9 @@ include ("classes/post.php");
 $login = new login();
 $user_data = $login->check_login($_SESSION['blog_userid']);
 
+
+
+
             // below this we have code for possting
     
     if($_SERVER['REQUEST_METHOD'] == "POST")
@@ -62,35 +65,47 @@ $user_data = $login->check_login($_SESSION['blog_userid']);
     <!-- cover page -->
 
     <div id="cover_area" >
-
+        
         <div style="background-color: #395783; text-align: center;color: white;">
-            <img src="./assets/treecover.jpg" style="width: 100%; max-height: 290px;">
+            
+            
+            <?php    
+            $image = "";
+                if(file_exists($user_data['cover_image']))
+                {
+                    $image= $user_data['cover_image'];
+                }
+               
+            ?>
+
+            <img src="<?php echo $image; ?>" style="width: 100%; max-height: 290px;">
             <span style="font-size:12px">  
 
             <?php
-            $image = "";
-            if(file_exists($user_data['profile_image']))
-            {
-                $image = $user_data['profile_image'];
-            }
-            else
-            {
-                if($user_data['gender']=="male") 
+                $image = "";
+                if(file_exists($user_data['profile_image']))
                 {
-                    $image="./assets/user_male.jpg";
-                } 
-                else if($user_data['gender']=="female") 
+                    $image = $user_data['profile_image'];
+                }
+                else
                 {
-                    $image="./assets/user_female.jpg";
-                }  
-            }
+                    if($user_data['gender']=="male") 
+                    {
+                        $image="./assets/user_male.jpg";
+                    } 
+                    else if($user_data['gender']=="female") 
+                    {
+                        $image="./assets/user_female.jpg";
+                    }  
+                }
             ?>
 
 
 
                 <img src="<?php echo $image; ?>" id="profile_pic">
                 <br>    
-                <a href="change_pimage.php" style= "text-decoration:none; color:black;"> Change Image</a>
+                <a href="change_pimage.php?change=profile" style= "text-decoration:none; color:black;"> Change Image</a> | 
+                <a href="change_pimage.php?change=cover" style= "text-decoration:none; color:black;"> Change Cover</a>
             </span>
             <br>
             <div style="font-size: 30px;"> <?php echo $user_data['fname']." ". $user_data['lname'];  ?></div>
