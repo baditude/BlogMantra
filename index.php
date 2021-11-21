@@ -41,7 +41,27 @@ $user_data = $login->check_login($_SESSION['blog_userid']);
             <div style="min-height: 400px; flex: 1;">
                 
                 <div id="friends_bar">
-                  <img src="./assets/kaushik.jpg" id="profile_pic">
+
+
+                <?php
+                    $image = "";
+                    if(file_exists($user_data['profile_image']))
+                    {
+                        $image = $user_data['profile_image'];
+                    }
+                    else
+                    {
+                        if($user_data['gender']=="male") 
+                        {
+                            $image="./assets/user_male.jpg";
+                        } 
+                        else if($user_data['gender']=="female") 
+                        {
+                            $image="./assets/user_female.jpg";
+                        }  
+                    }
+                ?>
+                  <img src="<?php echo $image; ?>" id="profile_pic">
                    <a href="profile.php" style="text-decoration:none; color:white;"> <?php echo $user_data['fname']."<br> ".$user_data['lname']; ?> </a>
                 </div>
             

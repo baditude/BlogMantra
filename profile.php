@@ -75,7 +75,12 @@ $user_data = $login->check_login($_SESSION['blog_userid']);
                 {
                     $image= $user_data['cover_image'];
                 }
+                else
+                {
+                    $image = "./assets/cover.jpg";
+                }
                
+
             ?>
 
             <img src="<?php echo $image; ?>" style="width: 100%; max-height: 290px;">

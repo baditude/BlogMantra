@@ -27,8 +27,18 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
         
             if(isset($_FILES['file']['name']) && $_FILES['file']['tmp_name'] != "")
             {
+                $folder = "uploads/" . $user_data['userid']."/";
 
-                $filename = "uploads/".  $_FILES['file']['name'];
+                // create folder
+                if(!file_exists($folder))
+                {
+                    mkdir($folder,0777,true); // true means create upload folder if not found
+                }
+                
+                $image = new image();
+                
+                
+                $filename = $folder .  $image->change_file_name(25).".jpg";
                 move_uploaded_file($_FILES['file']['tmp_name'],$filename);
               
                 
@@ -39,17 +49,25 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                     $change = $_GET['change'];
 
                 } 
-                $image = new image();
+               
                 
             
 
                 if($change == "cover")
                 {
+                    if(file_exists($user_data['cover_image']))
+                    {
+                        unlink($user_data['cover_image']); // deleting old photo
+                    }
                     $image->crop_image($filename,$filename,1366,488);
                 }
 
                 else
                 {
+                    if(file_exists($user_data['profile_image']))
+                    {
+                        unlink($user_data['profile_image']); // deleting old photo
+                    }
                     $image->crop_image($filename,$filename,800,800); 
                 }
 
@@ -135,7 +153,30 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                
             <div style="min-height: 400px; flex: 2.5;padding: 20px; padding-right: 0px;">
                 <div style="background-color: white; border: solid 1px #aaa; padding: 10px;">
+                   <div style="text-align:center;">
+                    <?php
+                        if(isset($_GET['change']))
+                            {
+                                if($_GET['change']== "cover")
+                                {
+                                    $image = $user_data['cover_image']; 
+                                   echo "<img src=' $image' style='max-width:500px; '>";
+                                }
+                                else
+                                {
+                                    $image = $user_data['profile_image'];
+                                    echo "<img src=' $image' style='max-width:500px; '>";
+
+                                }
+                        }
+
+                    ?>
                    
+                    </div>
+                    <br>
+                    <br>
+                
+                    
                     <form method="post" enctype="multipart/form-data">
                         <input type="file" name="file">
 
