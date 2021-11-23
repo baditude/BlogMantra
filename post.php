@@ -40,7 +40,7 @@
                     
                 <span style="float:right;">
                     <a href="">Edit</a> . 
-                    <a href="">Delete</a>
+                    <a href="delete.php?postid=<?php echo $row['postid'];?>">Delete</a>
                 </span>
             
             </div>

@@ -6,7 +6,10 @@ class database
     private $username = "root";
     private $password = "";
     private $host = "localhost";
-
+    // private $db = "blogmantra";
+    // private $username = "root";
+    // private $password = "123456789";
+    // private $host = "blogmantra.cv4vf4gp4t8e.ap-south-1.rds.amazonaws.com";
 
     function connect()
     {
