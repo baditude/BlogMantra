@@ -42,10 +42,10 @@ session_start();
 
 
 
-<body style="background-color: #222831">
+<body>
     <div id="top">
-        <div style="font-size: 40px;">Blog-Mantra</div>
-        <a href="signup.php"><div id="signup" style="color:white";>Signup</div></a>
+        <div class = "top-title">Blog-Mantra </div>
+        <a href="signup.php"><div id="signup">Signup</div></a>
     </div>
 
 
@@ -54,6 +54,7 @@ session_start();
         <div id="loginname" style="padding: 18px;">
             <h3>Log in to Blog-Mantra</h3>
         </div>
+        <br>
         <form  method="post">
             
             <div class="pass">
@@ -63,12 +64,12 @@ session_start();
             <div class="pass">
                 <input id="text" name="password"  type="password"  placeholder="  Password">
             </div>
-            
+            <br>
             <input type="submit" value="Log In" id="button">
             <br><br><br><br>
            
 
-           
+          
         </form>
     </div>
  
